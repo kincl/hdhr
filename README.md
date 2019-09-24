@@ -1,8 +1,12 @@
-** Project completed. Pending final review. **
-
-
-PyHdHomeRun
+HDHR
 -----------
+
+This is a forked version of the original [PyHdHomeRun](https://github.com/dsoprea/PyHdHomeRun)
+module that adds support for Python 3 and the latest versions of the libhdhomerun library.
+The following description is retained from the original version.
+
+Background
+----------
 
 The HDHomeRun (HDHR) TV tuner is a neat, standalone tuner-device that 
 communicates the video signals to your system over the network. A cheap one 
@@ -25,12 +29,12 @@ predefined tuner interface of another DVR or TV application.
 
 The goals of this project were as follows:
 
-> Be able to discover the device(s) on the local network.
-> Be able to poll for status.
-> Be able to list channels.
-> Be able to scan channels.
-> For a tuner to be able to set the channel and acquire a lock.
-> To be able to instruct a tuner to start sending video back.
+- Be able to discover the device(s) on the local network.
+- Be able to poll for status.
+- Be able to list channels.
+- Be able to scan channels.
+- For a tuner to be able to set the channel and acquire a lock.
+- To be able to instruct a tuner to start sending video back.
 
 All goals have all been completed.
 
@@ -38,7 +42,7 @@ All goals have all been completed.
 Requirements
 ------------
 
-> The HDHomeRun library. As my own distribution (Ubuntu) had a version that was 
+- The HDHomeRun library. If your distro has a packaged version that is 
   too old, you might have to download these from the website: 
   
     http://www.silicondust.com/support/hdhomerun/downloads/linux
