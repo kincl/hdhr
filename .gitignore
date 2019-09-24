@@ -4,6 +4,7 @@
 *.pyc
 /dist/
 /build/
+/.eggs/
 /hdhr.egg-info
 /bin
 /include

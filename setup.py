@@ -27,13 +27,12 @@ setup(name='hdhr',
                    'Topic :: Multimedia :: Video :: Capture'],
       keywords='tv television tuner tvtuner hdhomerun',
       author='Nat Burns',
-      author_email='myselfasunder@gmail.com',
+      author_email='nbaccount@burnskids.com',
       url='https://github.com/burnnat/hdhr',
       license='GPL 2',
       packages=['hdhr'],
       include_package_data=True,
       zip_safe=True,
-      install_requires=[
-          'setuptools',
-      ],
+      setup_requires=['wheel'],
+      install_requires=['setuptools']
 )
