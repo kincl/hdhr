@@ -1,13 +1,11 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 from sys import exit
 from pprint import pprint
 from os import chdir
 
-chdir('../..')
-
-from pyhdhomerun.adapter import HdhrUtility, HdhrDeviceQuery
-from pyhdhomerun.constants import MAP_US_CABLE
+from hdhr.adapter import HdhrUtility, HdhrDeviceQuery
+from hdhr.constants import MAP_US_CABLE
 
 def find_devices():
     devices = HdhrUtility.discover_find_devices_custom()
@@ -76,8 +74,8 @@ device_adapter = HdhrDeviceQuery(hd)
 status = get_tuner_vstatus(device_adapter)
 print("Status: %s" % (status))
 
-device_adapter.set_tuner_vchannel(49)
-device_adapter.set_tuner_target('rtp://192.168.5.13:7891')
+#device_adapter.set_tuner_vchannel(49)
+#device_adapter.set_tuner_target('rtp://192.168.5.13:7891')
 #device_adapter.set_tuner_target(None)
 
 #get_supported(device_adapter)
@@ -87,4 +85,3 @@ device_adapter.set_tuner_target('rtp://192.168.5.13:7891')
 #scan(device_adapter)
 
 print("Done.")
-s
