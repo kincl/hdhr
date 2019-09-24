@@ -4,7 +4,7 @@
 *.pyc
 /dist/
 /build/
-/pyhdhomerun.egg-info
+/hdhr.egg-info
 /bin
 /include
 /lib

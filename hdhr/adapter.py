@@ -8,11 +8,11 @@ from time import time
 from collections import deque
 from struct import unpack
 
-from pyhdhomerun.externals import *
-from pyhdhomerun.types import *
-from pyhdhomerun.constants import *
+from hdhr.externals import *
+from hdhr.types import *
+from hdhr.constants import *
                                   
-from pyhdhomerun.utility import ascii_bytes, ip_ascii_to_int
+from hdhr.utility import ascii_bytes, ip_ascii_to_int
 
 class HdhrUtility(object):
     """Calls that don't require a device entity."""

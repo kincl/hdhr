@@ -1,7 +1,7 @@
 from ctypes import *
 
-from pyhdhomerun.utility import ascii_str, ip_int_to_ascii
-from pyhdhomerun.constants import *
+from hdhr.utility import ascii_str, ip_int_to_ascii
+from hdhr.constants import *
 
 class TYPE_hdhomerun_discover_device_t(Structure):
     _fields_ = [('ip_addr',     c_uint, 32),

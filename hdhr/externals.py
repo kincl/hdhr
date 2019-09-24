@@ -2,13 +2,13 @@ import logging
 
 from ctypes import *
 
-import pyhdhomerun.hdhr
+import hdhr.libhdhr
 
-from pyhdhomerun.types import *
-from pyhdhomerun.constants import MAX_DEVICES
+from hdhr.types import *
+from hdhr.constants import MAX_DEVICES
 
 try:
-    hdhr = pyhdhomerun.hdhr.library
+    hdhr = hdhr.libhdhr.library
 except:
     logging.exception("Could not acquire HDHR object for bindings.")
     raise

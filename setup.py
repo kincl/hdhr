@@ -6,7 +6,7 @@ dev_path = os.path.dirname(__file__)
 sys.path.insert(0, dev_path)
 
 try:
-    import pyhdhomerun.hdhr
+    import hdhr.libhdhr
 except OSError as e:
     print("Could not load HDHomeRun library: %s" % (e))
     sys.exit(1)
@@ -17,24 +17,23 @@ long_description = "HDHomeRun interface library. Supports device discovery, " \
                    "channel-scanning, streaming, status inquiries, channel " \
                    "changes, etc.."""
 
-setup(name='pyhdhomerun',
-      version='2.3.5',
-      description="HDHomeRun interface library.",
+setup(name='hdhr',
+      version='0.0.1',
+      description="HDHomeRun interface library for Python 3.",
       long_description=long_description,
       classifiers=['Development Status :: 4 - Beta',
                    'Natural Language :: English',
                    'Topic :: Software Development :: Libraries :: Python Modules',
                    'Topic :: Multimedia :: Video :: Capture'],
       keywords='tv television tuner tvtuner hdhomerun',
-      author='Dustin Oprea',
+      author='Nat Burns',
       author_email='myselfasunder@gmail.com',
-      url='https://github.com/dsoprea/PyHdHomeRun',
+      url='https://github.com/burnnat/hdhr',
       license='GPL 2',
-      packages=['pyhdhomerun'],
+      packages=['hdhr'],
       include_package_data=True,
       zip_safe=True,
       install_requires=[
           'setuptools',
       ],
 )
-
