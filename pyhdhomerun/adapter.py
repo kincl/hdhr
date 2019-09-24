@@ -12,7 +12,7 @@ from pyhdhomerun.externals import *
 from pyhdhomerun.types import *
 from pyhdhomerun.constants import *
                                   
-from pyhdhomerun.utility import ip_ascii_to_int
+from pyhdhomerun.utility import ascii_bytes, ip_ascii_to_int
 
 class HdhrUtility(object):
     """Calls that don't require a device entity."""
@@ -64,9 +64,9 @@ class HdhrUtility(object):
         """Create a device-object to manipulate a specific device with."""
 
         logging.info("Creating device-entity for device [%s]." % (device_str))
-    
+
         try:
-            device = CFUNC_hdhomerun_device_create_from_str(device_str, 
+            device = CFUNC_hdhomerun_device_create_from_str(ascii_bytes(device_str), 
                                                             None
                                                            )
         except:
@@ -168,7 +168,7 @@ class HdhrDeviceQuery(object):
         
         try:
             result = CFUNC_hdhomerun_device_set_tuner_vchannel(self.hd, 
-                                                               vchannel)
+                                                               ascii_bytes(vchannel))
         except:
             logging.exception("Could not set vchannel.")
             raise
@@ -369,7 +369,7 @@ class HdhrDeviceQuery(object):
 
         try:
             result = CFUNC_hdhomerun_device_set_tuner_target(self.hd, 
-                                                             target_uri)
+                                                             ascii_bytes(target_uri))
         except:
             logging.exception("There was an exception while setting the tuner "
                               "target.")

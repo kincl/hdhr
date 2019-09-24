@@ -14,7 +14,7 @@ except:
     raise
 
 CFUNC_hdhomerun_discover_find_devices_custom = \
-    hdhr.hdhomerun_discover_find_devices_custom
+    hdhr.hdhomerun_discover_find_devices_custom_v2
 CFUNC_hdhomerun_discover_find_devices_custom.argtypes = \
     [c_uint, 
      c_uint, 

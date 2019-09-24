@@ -1,6 +1,6 @@
 from ctypes import *
 
-from pyhdhomerun.utility import ip_int_to_ascii
+from pyhdhomerun.utility import ascii_str, ip_int_to_ascii
 from pyhdhomerun.constants import *
 
 class TYPE_hdhomerun_discover_device_t(Structure):
@@ -80,7 +80,7 @@ class TYPE_hdhomerun_tuner_status_t(Structure):
         return ("STATUS  CHANNEL= [%s]  LOCK_STR= [%s]  SIG_PRESENT= [%s]  "
                 "LOCK_SUPP= [%s]  LOCK_UNSUPP= [%s]  SIG_STRENGTH= (%d)  "
                 "SN_QUAL= (%d)  SYMERR_QUAL= (%d)  RAW_BPS= (%d)  PPS= (%d)" %
-                (self.channel, self.lock_str, not not self.signal_present, 
+                (ascii_str(self.channel), ascii_str(self.lock_str), not not self.signal_present, 
                  not not self.lock_supported, not not self.lock_unsupported, 
                  self.signal_strength, self.signal_to_noise_quality, 
                  self.symbol_error_quality, self.raw_bits_per_second, 
@@ -118,7 +118,7 @@ class TYPE_hdhomerun_channelscan_result_t(Structure):
     def __str__(self):
         return ("CHANNELSCAN-RES  STR= [%s]  MAP= (%d)  FREQ= (%d)  STATUS= "
                 "[%s]  PROG_COUNT= (%d)  STREAM_DETECTED= [%s]  STREAM_ID= "
-                "(%d)" % (self.channel_str, self.channelmap, self.frequency,
+                "(%d)" % (ascii_str(self.channel_str), self.channelmap, self.frequency,
                           '<present>' if self.status else None, self.program_count, 
                           not not self.transport_stream_id_detected, 
                           self.transport_stream_id))
@@ -150,8 +150,8 @@ class TYPE_hdhomerun_device_t(Structure):
         return ("DEVICE  SCAN= [%s]  MC_IP= [%s]  MS_PORT= [%s]  "
                 "ID= [%s]  TUNER= (%d)  LK= (%d)  NAME= [%s]  MODEL= [%s]" % 
                 (self.scan.contents if self.scan else None, self.nice_multicast_ip, self.multicast_port, 
-                 self.nice_device_id, self.tuner, self.lockkey, self.name,
-                 self.model))
+                 self.nice_device_id, self.tuner, self.lockkey, ascii_str(self.name),
+                 ascii_str(self.model)))
 
 TYPE_hdhomerun_channelscan_t._fields_ = \
    [('hd',               POINTER(TYPE_hdhomerun_device_t)),
@@ -292,7 +292,7 @@ class TYPE_hdhomerun_tuner_vstatus_t(Structure):
     def __str__(self):
         return ("VSTATUS  VCHANNEL= [%s]  NAME= [%s]  AUTH= [%s]  CCI= [%s]  "
                 "CGMS= [%s]  NOT_SUB= [%s]  NOT_AVAIL= [%s]  "
-                "COPY_PROTECTED= [%s]" % (self.vchannel, self.name, self.auth,
-                 self.cci, self.cgms, not not self.not_subscribed, 
+                "COPY_PROTECTED= [%s]" % (ascii_str(self.vchannel), ascii_str(self.name), ascii_str(self.auth),
+                 ascii_str(self.cci), ascii_str(self.cgms), not not self.not_subscribed, 
                  not not self.not_available, not not self.copy_protected))
 
