@@ -278,6 +278,14 @@ class TYPE_hdhomerun_tuner_vstatus_t(Structure):
                ]
 
     @property
+    def nice_vchannel(self):
+        return ascii_str(self.vchannel)
+
+    @property
+    def nice_name(self):
+        return ascii_str(self.name)
+
+    @property
     def not_subscribed(self):
         return not not self.not_subscribed
 
@@ -292,7 +300,7 @@ class TYPE_hdhomerun_tuner_vstatus_t(Structure):
     def __str__(self):
         return ("VSTATUS  VCHANNEL= [%s]  NAME= [%s]  AUTH= [%s]  CCI= [%s]  "
                 "CGMS= [%s]  NOT_SUB= [%s]  NOT_AVAIL= [%s]  "
-                "COPY_PROTECTED= [%s]" % (ascii_str(self.vchannel), ascii_str(self.name), ascii_str(self.auth),
+                "COPY_PROTECTED= [%s]" % (self.nice_vchannel, self.nice_name, ascii_str(self.auth),
                  ascii_str(self.cci), ascii_str(self.cgms), not not self.not_subscribed, 
                  not not self.not_available, not not self.copy_protected))
 
