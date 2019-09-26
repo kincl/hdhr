@@ -11,8 +11,10 @@ from struct import unpack
 from hdhr.externals import *
 from hdhr.types import *
 from hdhr.constants import *
-                                  
+
 from hdhr.utility import ascii_bytes, ip_ascii_to_int
+
+_LOGGER = logging.getLogger(__name__)
 
 class HdhrUtility(object):
     """Calls that don't require a device entity."""
@@ -28,10 +30,10 @@ class HdhrUtility(object):
         try:
             ip_int = ip_ascii_to_int(ip) if ip else 0
         except:
-            logging.exception("Could not convert IP [%s] to integer." % (ip))
+            _LOGGER.exception("Could not convert IP [%s] to integer." % (ip))
             raise
 
-        logging.info("Discovering devices.  MAX= (%d)  IP= [%s]" % 
+        _LOGGER.info("Discovering devices.  MAX= (%d)  IP= [%s]" % 
                      (MAX_DEVICES, ip if ip_int else 0))
 
         devices = (TYPE_hdhomerun_discover_device_t * MAX_DEVICES)()
@@ -45,17 +47,17 @@ class HdhrUtility(object):
                             MAX_DEVICES
                         )
         except:
-            logging.exception("Library call to discover devices failed.")
+            _LOGGER.exception("Library call to discover devices failed.")
             raise
 
         if num_found == -1:
             message = ("Device discovery failed (%d), but this could be due to" 
                        " lack of connectivity." % (num_found))
 
-            logging.warn(message)
+            _LOGGER.warn(message)
             return []
 
-        logging.info("(%d) devices found." % (num_found))
+        _LOGGER.info("(%d) devices found." % (num_found))
 
         return devices[0:num_found]
 
@@ -63,20 +65,20 @@ class HdhrUtility(object):
     def device_create_from_str(device_str):
         """Create a device-object to manipulate a specific device with."""
 
-        logging.info("Creating device-entity for device [%s]." % (device_str))
+        _LOGGER.info("Creating device-entity for device [%s]." % (device_str))
 
         try:
             device = CFUNC_hdhomerun_device_create_from_str(ascii_bytes(device_str), 
                                                             None
                                                            )
         except:
-            logging.exception("Library call to create device entity failed.")
+            _LOGGER.exception("Library call to create device entity failed.")
             raise
 
         if not device:
             message = "Could not build device entity."
             
-            logging.exception(message)
+            _LOGGER.exception(message)
             raise Exception(message)
 
         return device.contents
@@ -85,25 +87,25 @@ class HdhrUtility(object):
     def get_channels_in_range(channel_map):
         """Determine the maximum number of channels available."""
 
-        logging.info("Calculating channels count.")
+        _LOGGER.info("Calculating channels count.")
     
         try:
             channel_list = CFUNC_hdhomerun_channel_list_create(channel_map)
         except:
-            logging.exception("Could not create channel-list entity for range "
+            _LOGGER.exception("Could not create channel-list entity for range "
                               "check.")
             raise
 
         if not channel_list:
             message = "Could not build channel-list."
             
-            logging.error(message)
+            _LOGGER.error(message)
             raise Exception(message)
 
         try:
             count = CFUNC_hdhomerun_channel_list_total_count(channel_list)
         except:
-            logging.exception("Could not produce channel count.")
+            _LOGGER.exception("Could not produce channel count.")
             raise
         else:
             return count
@@ -111,7 +113,7 @@ class HdhrUtility(object):
             try:
                 CFUNC_hdhomerun_channel_list_destroy(channel_list)
             except:
-                logging.exception("Could not destroy channel-list entity.")
+                _LOGGER.exception("Could not destroy channel-list entity.")
                 raise
 
 class HdhrDeviceQuery(object):
@@ -126,7 +128,7 @@ class HdhrDeviceQuery(object):
         try:
             CFUNC_hdhomerun_device_destroy(self.hd)
         except:
-            logging.exception("Could not destroy device-entity object.")
+            _LOGGER.exception("Could not destroy device-entity object.")
             raise
 
     def get_tuner_vstatus(self):
@@ -134,7 +136,7 @@ class HdhrDeviceQuery(object):
         channel number).
         """
 
-        logging.info("Doing device_get_tuner_vstatus call for device [%s]." % 
+        _LOGGER.info("Doing device_get_tuner_vstatus call for device [%s]." % 
                      (self.hd))
 
         raw_data = c_char_p()
@@ -147,13 +149,13 @@ class HdhrDeviceQuery(object):
                             vstatus
                         )
         except:
-            logging.exception("Tuner vstatus failed.")
+            _LOGGER.exception("Tuner vstatus failed.")
             raise
 
         if result != 1:
             message = ("Could not get tuner vstatus (%d)." % (result))
             
-            logging.error(message)
+            _LOGGER.error(message)
             raise Exception(message)
 
         return (vstatus, raw_data.value)
@@ -163,20 +165,20 @@ class HdhrDeviceQuery(object):
         
         vchannel = str(vchannel)
         
-        logging.info("Doing device_set_tuner_vchannel call for device [%s] with"
+        _LOGGER.info("Doing device_set_tuner_vchannel call for device [%s] with"
                      " vchannel [%s]." % (self.hd, vchannel))
         
         try:
             result = CFUNC_hdhomerun_device_set_tuner_vchannel(self.hd, 
                                                                ascii_bytes(vchannel))
         except:
-            logging.exception("Could not set vchannel.")
+            _LOGGER.exception("Could not set vchannel.")
             raise
 
         if result != 1:
             message = "Failed to set vchannel."
             
-            logging.error(message)
+            _LOGGER.error(message)
             raise Exception(message)
         
     def get_supported(self, prefix=None):
@@ -184,7 +186,7 @@ class HdhrDeviceQuery(object):
     
         raw_str = c_char_p()
 
-        logging.info("Doing device_get_supported call for device [%s]." % 
+        _LOGGER.info("Doing device_get_supported call for device [%s]." % 
                      (self.hd))
 
         try:
@@ -194,13 +196,13 @@ class HdhrDeviceQuery(object):
                             raw_str
                         )
         except:
-            logging.exception("Could not do get-supported request.")
+            _LOGGER.exception("Could not do get-supported request.")
             raise
 
         if result != 1:
             message = ("Could not get supported features (%d)." % (result))
             
-            logging.error(message)
+            _LOGGER.error(message)
             raise Exception(message)
 
         raw_rows = raw_str.value.strip().split("\n")
@@ -218,29 +220,29 @@ class HdhrDeviceQuery(object):
         in the future.
         """
     
-        logging.info("Doing channel scan with map [%s]." % (channel_map))
+        _LOGGER.info("Doing channel scan with map [%s]." % (channel_map))
 
-        logging.debug("Determining range of channel scan.")
+        _LOGGER.debug("Determining range of channel scan.")
 
         try:
             num_channels = HdhrUtility.get_channels_in_range(channel_map)
         except:
-            logging.exception("Could not calculate the maximum number of "
+            _LOGGER.exception("Could not calculate the maximum number of "
                               "channels to be scanned.")
             raise
 
-        logging.debug("Building channel-scan object.")
+        _LOGGER.debug("Building channel-scan object.")
 
         try:
             scan = CFUNC_channelscan_create(self.hd, channel_map)
         except:
-            logging.exception("Could not initialize channel-scan object.")
+            _LOGGER.exception("Could not initialize channel-scan object.")
             raise
 
         if not scan:
             message = "Could not build channel-scan object."
             
-            logging.error(message)
+            _LOGGER.error(message)
             raise Exception(message)
 
         return { 'scan':    scan, 
@@ -256,7 +258,7 @@ class HdhrDeviceQuery(object):
 
         # Scanning has already completed.
         if state['done']:
-            logging.debug("HDHR: Iteration is short-circuiting because we're "
+            _LOGGER.debug("HDHR: Iteration is short-circuiting because we're "
                           "already done.")
             return False
 
@@ -266,7 +268,7 @@ class HdhrDeviceQuery(object):
         if CFUNC_channelscan_advance(state['scan'].contents, result) != 1:
             state['done'] = True
             
-            logging.debug("HDHR: Finished channel-scanning.")
+            _LOGGER.debug("HDHR: Finished channel-scanning.")
             return False
 
         state['current'] += 1
@@ -274,14 +276,14 @@ class HdhrDeviceQuery(object):
         if CFUNC_channelscan_detect(state['scan'].contents, result) == 1 and \
              result.program_count > 0:
 
-            logging.debug("HDHR: Channel (%d) locked." % (state['current']))
+            _LOGGER.debug("HDHR: Channel (%d) locked." % (state['current']))
             return result
         
         else:
-            logging.debug("HDHR: Channel (%d) skipped." % (state['current']))
+            _LOGGER.debug("HDHR: Channel (%d) skipped." % (state['current']))
             return None
 
-        logging.debug("Channel scan progress is (%d)/(%d)." % (i + 1, 
+        _LOGGER.debug("Channel scan progress is (%d)/(%d)." % (i + 1, 
                                                                num_channels))
 
     def scan_channels(self, channel_map):
@@ -290,46 +292,46 @@ class HdhrDeviceQuery(object):
         and indicates whether it could be locked, current progress, . If so, it 
         """
 
-        logging.info("Doing channel scan with map [%s]." % (channel_map))
+        _LOGGER.info("Doing channel scan with map [%s]." % (channel_map))
 
-        logging.debug("Determining range of channel scan.")
+        _LOGGER.debug("Determining range of channel scan.")
 
         try:
             num_channels = HdhrUtility.get_channels_in_range(channel_map)
         except:
-            logging.exception("Could not calculate the maximum number of "
+            _LOGGER.exception("Could not calculate the maximum number of "
                               "channels to be scanned.")
             raise
 
-        logging.debug("Building channel-scan object.")
+        _LOGGER.debug("Building channel-scan object.")
 
         try:
             scan = CFUNC_channelscan_create(self.hd, channel_map)
         except:
-            logging.exception("Could not initialize channel-scan object.")
+            _LOGGER.exception("Could not initialize channel-scan object.")
             raise
 
         if not scan:
             message = "Could not build channel-scan object."
             
-            logging.error(message)
+            _LOGGER.error(message)
             raise Exception(message)
 
-        logging.debug("Doing actual scan.")
+        _LOGGER.debug("Doing actual scan.")
 
         try:
             found = self.__do_scan(scan, num_channels)
         except:
-            logging.exception("Could not do actual channel scan.")
+            _LOGGER.exception("Could not do actual channel scan.")
             raise
         else:
-            logging.info("Found programs on (%d) channels." % (len(found)))
+            _LOGGER.info("Found programs on (%d) channels." % (len(found)))
             return found
         finally:
             try:
                 CFUNC_channelscan_destroy(scan)
             except:
-                logging.exception("Could not destroy channel-scan entity.")
+                _LOGGER.exception("Could not destroy channel-scan entity.")
                 raise
 
     def __do_scan(self, scan, num_channels):
@@ -353,7 +355,7 @@ class HdhrDeviceQuery(object):
             
             i += 1
 
-            logging.debug("Channel scan progress is (%d)/(%d)." % 
+            _LOGGER.debug("Channel scan progress is (%d)/(%d)." % 
                           (i + 1, num_channels))
 
         # Yield at 100%.
@@ -365,20 +367,20 @@ class HdhrDeviceQuery(object):
         if target_uri is None:
             target_uri = 'none'
 
-        logging.info("Setting target to [%s]." % (target_uri))
+        _LOGGER.info("Setting target to [%s]." % (target_uri))
 
         try:
             result = CFUNC_hdhomerun_device_set_tuner_target(self.hd, 
                                                              ascii_bytes(target_uri))
         except:
-            logging.exception("There was an exception while setting the tuner "
+            _LOGGER.exception("There was an exception while setting the tuner "
                               "target.")
             raise
 
         if result != 1:
             message = ("Could not set tuner target to [%s]." % (target))
             
-            logging.error(message)
+            _LOGGER.error(message)
             raise Exception(message)
 
 class HdhrVideoPrimitives(object):
@@ -395,14 +397,14 @@ class HdhrVideoPrimitives(object):
         try:
             result = CFUNC_hdhomerun_device_stream_start(self.hd)
         except:
-            logging.exception("There was an exception within the stream-start "
+            _LOGGER.exception("There was an exception within the stream-start "
                               "external.")
             raise
 
         if result != 1:
             message = "Stream-start failed."
             
-            logging.error(message)
+            _LOGGER.error(message)
             raise Exception(message)
     
     def stop_video(self):
@@ -411,7 +413,7 @@ class HdhrVideoPrimitives(object):
         try:
             result = CFUNC_hdhomerun_device_stream_stop(self.hd)
         except:
-            logging.exception("There was an exception within the stream-stop "
+            _LOGGER.exception("There was an exception within the stream-stop "
                               "external.")
             raise
     
@@ -429,7 +431,7 @@ class HdhrVideoPrimitives(object):
                             byref(actual_count)
                          )
         except:
-            logging.exception("Could not read RTP frame.")
+            _LOGGER.exception("Could not read RTP frame.")
             raise
 
         return (byte_array, actual_count.value)
@@ -448,7 +450,7 @@ class HdhrVideo(object):
         try:
             self.vprim = HdhrVideoPrimitives(hd)
         except:
-            logging.exception("Could not build video-primitives object.")
+            _LOGGER.exception("Could not build video-primitives object.")
             raise
 
     def __receive_loop(self, frame_cb):
@@ -457,7 +459,7 @@ class HdhrVideo(object):
             try:        
                 frame = self.vprim.receive_rtp_frame()
             except:
-                logging.exception("Could not read frame.")
+                _LOGGER.exception("Could not read frame.")
                 raise
 
             if not frame[1]:
@@ -467,7 +469,7 @@ class HdhrVideo(object):
                 if not frame_cb(frame):
                     break
             except:
-                logging.exception("Uncaught exception in frame callback.")
+                _LOGGER.exception("Uncaught exception in frame callback.")
                 raise
 
             count += 1
@@ -476,27 +478,27 @@ class HdhrVideo(object):
 
     def stream_video(self, frame_cb):
 
-        logging.info("Starting video feed: %s" % (self.hd))
+        _LOGGER.info("Starting video feed: %s" % (self.hd))
         
         try:
             self.vprim.start_video()
         except:
-            logging.exception("Could not start feed.")
+            _LOGGER.exception("Could not start feed.")
             raise
 
         try:
             self.__receive_loop(frame_cb)
         except Exception as e:
-            logging.exception("There was an error in the feed receive-loop: "
+            _LOGGER.exception("There was an error in the feed receive-loop: "
                               "%s" % (e))
             raise
         finally:
-            logging.info("Stopping video feed: %s" % (self.hd))
+            _LOGGER.info("Stopping video feed: %s" % (self.hd))
         
             try:
                 self.vprim.stop_video()
             except:
-                logging.exception("Exception while stopping feed.")
+                _LOGGER.exception("Exception while stopping feed.")
                 raise
 
     def stream_to_file(self, file_path):
@@ -548,6 +550,6 @@ class HdhrVideo(object):
             try:
                 return self.stream_video(frame_received)
             except:
-                logging.exception("Error while streaming the video.")
+                _LOGGER.exception("Error while streaming the video.")
                 raise
 
