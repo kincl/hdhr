@@ -131,6 +131,38 @@ class HdhrDeviceQuery(object):
             _LOGGER.exception("Could not destroy device-entity object.")
             raise
 
+    def get_hw_model_str(self):
+        """Get the hardware model of the device."""
+
+        _LOGGER.debug("Doing device_get_hw_model_str call for device [%s]." % 
+                     (self.hd))
+
+        try:
+            result = CFUNC_hdhomerun_device_get_hw_model_str(
+                            self.hd
+                        )
+        except:
+            _LOGGER.exception("Could not get hardware model string.")
+            raise
+
+        return ascii_str(result)
+
+    def get_model_str(self):
+        """Get the model of the device."""
+
+        _LOGGER.debug("Doing device_get_model_str call for device [%s]." % 
+                     (self.hd))
+
+        try:
+            result = CFUNC_hdhomerun_device_get_model_str(
+                            self.hd
+                        )
+        except:
+            _LOGGER.exception("Could not get model string.")
+            raise
+
+        return ascii_str(result)
+
     def get_tuner_vstatus(self):
         """Get the current state of the tuner using virtual channels (familiar 
         channel number).
@@ -180,7 +212,33 @@ class HdhrDeviceQuery(object):
             
             _LOGGER.error(message)
             raise Exception(message)
-        
+
+    def get_version(self):
+        """Get firmware version."""
+
+        raw_str = c_char_p()
+
+        _LOGGER.debug("Doing device_get_version call for device [%s]." %
+                     (self.hd))
+
+        try:
+            result = CFUNC_hdhomerun_device_get_version(
+                            self.hd, 
+                            raw_str,
+                            None
+                        )
+        except:
+            _LOGGER.exception("Could not do get version request.")
+            raise
+
+        if result != 1:
+            message = ("Could not get firmware version (%d)." % (result))
+            
+            _LOGGER.error(message)
+            raise Exception(message)
+
+        return ascii_str(raw_str.value)
+
     def get_supported(self, prefix=None):
         """Get supported features as a dictionary of lists."""
     
@@ -205,7 +263,7 @@ class HdhrDeviceQuery(object):
             _LOGGER.error(message)
             raise Exception(message)
 
-        raw_rows = raw_str.value.strip().split("\n")
+        raw_rows = ascii_str(raw_str.value).strip().split("\n")
         rows = { }
         for row in raw_rows:
             (key, value) = row.split(': ', 1)

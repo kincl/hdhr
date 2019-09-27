@@ -48,6 +48,14 @@ CFUNC_hdhomerun_device_get_tuner_vstatus.argtypes = \
      POINTER(TYPE_hdhomerun_tuner_vstatus_t)
     ]
 
+CFUNC_hdhomerun_device_get_version = \
+    hdhr.hdhomerun_device_get_version
+CFUNC_hdhomerun_device_get_version.argtypes = \
+    [POINTER(TYPE_hdhomerun_device_t),
+     POINTER(c_char_p), 
+     POINTER(c_uint)
+    ]
+
 CFUNC_hdhomerun_device_get_supported = \
     hdhr.hdhomerun_device_get_supported
 CFUNC_hdhomerun_device_get_supported.argtypes = \
@@ -55,6 +63,22 @@ CFUNC_hdhomerun_device_get_supported.argtypes = \
      c_void_p,
      POINTER(c_char_p)
     ]
+
+CFUNC_hdhomerun_device_get_hw_model_str = \
+    hdhr.hdhomerun_device_get_hw_model_str
+CFUNC_hdhomerun_device_get_hw_model_str.argtypes = \
+    [POINTER(TYPE_hdhomerun_device_t)
+    ]
+CFUNC_hdhomerun_device_get_hw_model_str.restype = \
+    c_char_p
+
+CFUNC_hdhomerun_device_get_model_str = \
+    hdhr.hdhomerun_device_get_model_str
+CFUNC_hdhomerun_device_get_model_str.argtypes = \
+    [POINTER(TYPE_hdhomerun_device_t)
+    ]
+CFUNC_hdhomerun_device_get_model_str.restype = \
+    c_char_p
 
 #CFUNC_hdhomerun_channel_list_create = \
 #    hdhr.hdhomerun_channel_list_create

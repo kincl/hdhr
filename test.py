@@ -61,6 +61,22 @@ if not devices:
 i = 0
 for device in devices:
     print("%d: %s" % (i, device))
+
+    hd = HdhrUtility.device_create_from_str(device.nice_device_id)
+    device_adapter = HdhrDeviceQuery(hd)
+
+    hw_model = device_adapter.get_hw_model_str()
+    print("HW Model: %s" % (hw_model))
+
+    model = device_adapter.get_model_str()
+    print("Model: %s" % (model))
+
+    version = device_adapter.get_version()
+    print("Version: %s" % (version))
+
+    features = device_adapter.get_supported()
+    print("Features: %s" % (features))
+
     i += 1
     
 print
