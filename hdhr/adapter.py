@@ -33,7 +33,7 @@ class HdhrUtility(object):
             _LOGGER.exception("Could not convert IP [%s] to integer." % (ip))
             raise
 
-        _LOGGER.info("Discovering devices.  MAX= (%d)  IP= [%s]" % 
+        _LOGGER.debug("Discovering devices.  MAX= (%d)  IP= [%s]" % 
                      (MAX_DEVICES, ip if ip_int else 0))
 
         devices = (TYPE_hdhomerun_discover_device_t * MAX_DEVICES)()
@@ -57,7 +57,7 @@ class HdhrUtility(object):
             _LOGGER.warn(message)
             return []
 
-        _LOGGER.info("(%d) devices found." % (num_found))
+        _LOGGER.debug("(%d) devices found." % (num_found))
 
         return devices[0:num_found]
 
@@ -65,7 +65,7 @@ class HdhrUtility(object):
     def device_create_from_str(device_str):
         """Create a device-object to manipulate a specific device with."""
 
-        _LOGGER.info("Creating device-entity for device [%s]." % (device_str))
+        _LOGGER.debug("Creating device-entity for device [%s]." % (device_str))
 
         try:
             device = CFUNC_hdhomerun_device_create_from_str(ascii_bytes(device_str), 
@@ -87,7 +87,7 @@ class HdhrUtility(object):
     def get_channels_in_range(channel_map):
         """Determine the maximum number of channels available."""
 
-        _LOGGER.info("Calculating channels count.")
+        _LOGGER.debug("Calculating channels count.")
     
         try:
             channel_list = CFUNC_hdhomerun_channel_list_create(channel_map)
@@ -136,7 +136,7 @@ class HdhrDeviceQuery(object):
         channel number).
         """
 
-        _LOGGER.info("Doing device_get_tuner_vstatus call for device [%s]." % 
+        _LOGGER.debug("Doing device_get_tuner_vstatus call for device [%s]." % 
                      (self.hd))
 
         raw_data = c_char_p()
@@ -165,7 +165,7 @@ class HdhrDeviceQuery(object):
         
         vchannel = str(vchannel)
         
-        _LOGGER.info("Doing device_set_tuner_vchannel call for device [%s] with"
+        _LOGGER.debug("Doing device_set_tuner_vchannel call for device [%s] with"
                      " vchannel [%s]." % (self.hd, vchannel))
         
         try:
@@ -186,7 +186,7 @@ class HdhrDeviceQuery(object):
     
         raw_str = c_char_p()
 
-        _LOGGER.info("Doing device_get_supported call for device [%s]." % 
+        _LOGGER.debug("Doing device_get_supported call for device [%s]." % 
                      (self.hd))
 
         try:
@@ -367,7 +367,7 @@ class HdhrDeviceQuery(object):
         if target_uri is None:
             target_uri = 'none'
 
-        _LOGGER.info("Setting target to [%s]." % (target_uri))
+        _LOGGER.debug("Setting target to [%s]." % (target_uri))
 
         try:
             result = CFUNC_hdhomerun_device_set_tuner_target(self.hd, 
