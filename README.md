@@ -2,7 +2,7 @@ HDHR
 -----------
 
 This is a forked version of the original [PyHdHomeRun](https://github.com/dsoprea/PyHdHomeRun)
-module that adds support for Python 3 and the latest versions of the libhdhomerun library.
+module that adds support for Python 3 and the latest versions of the [libhdhomerun](https://github.com/Silicondust/libhdhomerun) library.
 The following description is retained from the original version.
 
 Background
