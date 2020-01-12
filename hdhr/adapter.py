@@ -16,6 +16,18 @@ from hdhr.utility import ascii_bytes, ip_ascii_to_int
 
 _LOGGER = logging.getLogger(__name__)
 
+class OperationRejectedError(Exception):
+    """Indicates that the current operation was rejected by the remote device."""
+    pass
+
+def error_for_result(result, message):
+    if result == 0:
+        return OperationRejectedError(message)
+    elif result == -1:
+        return ConnectionError(message)
+    else:
+        return Exception(message)
+
 class HdhrUtility(object):
     """Calls that don't require a device entity."""
 
@@ -186,7 +198,7 @@ class HdhrDeviceQuery(object):
             message = ("Could not get tuner status (%d)." % (result))
             
             _LOGGER.error(message)
-            raise Exception(message)
+            raise error_for_result(result, message)
 
         return (status, raw_data.value)
 
@@ -215,7 +227,7 @@ class HdhrDeviceQuery(object):
             message = ("Could not get tuner vstatus (%d)." % (result))
             
             _LOGGER.error(message)
-            raise Exception(message)
+            raise error_for_result(result, message)
 
         return (vstatus, raw_data.value)
 
@@ -238,7 +250,7 @@ class HdhrDeviceQuery(object):
             message = "Failed to set vchannel."
             
             _LOGGER.error(message)
-            raise Exception(message)
+            raise error_for_result(result, message)
 
     def get_version(self):
         """Get firmware version."""
@@ -262,7 +274,7 @@ class HdhrDeviceQuery(object):
             message = ("Could not get firmware version (%d)." % (result))
             
             _LOGGER.error(message)
-            raise Exception(message)
+            raise error_for_result(result, message)
 
         return ascii_str(raw_str.value)
 
@@ -288,7 +300,7 @@ class HdhrDeviceQuery(object):
             message = ("Could not get supported features (%d)." % (result))
             
             _LOGGER.error(message)
-            raise Exception(message)
+            raise error_for_result(result, message)
 
         raw_rows = ascii_str(raw_str.value).strip().split("\n")
         rows = { }
@@ -466,7 +478,7 @@ class HdhrDeviceQuery(object):
             message = ("Could not set tuner target to [%s]." % (target))
             
             _LOGGER.error(message)
-            raise Exception(message)
+            raise error_for_result(result, message)
 
 class HdhrVideoPrimitives(object):
     """Wrappers for low-level functions."""
@@ -490,7 +502,7 @@ class HdhrVideoPrimitives(object):
             message = "Stream-start failed."
             
             _LOGGER.error(message)
-            raise Exception(message)
+            raise error_for_result(result, message)
     
     def stop_video(self):
         """Cease receiving video (the library closes its receiver thread)."""
