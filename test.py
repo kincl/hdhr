@@ -15,6 +15,11 @@ def find_devices():
 
     return devices
 
+def get_tuner_status(device_adapter):
+    
+    (status, raw_data) = device_adapter.get_tuner_status()
+    print(status)
+
 def get_tuner_vstatus(device_adapter):
     
     (vstatus, raw_data) = device_adapter.get_tuner_vstatus()
@@ -88,8 +93,11 @@ for tuner in range(0, devices[0].tuner_count):
 
     device_adapter = HdhrDeviceQuery(hd)
 
-    status = get_tuner_vstatus(device_adapter)
+    status = get_tuner_status(device_adapter)
     print("Status: %s" % (status))
+
+    vstatus = get_tuner_vstatus(device_adapter)
+    print("Vstatus: %s" % (vstatus))
 
 #device_adapter.set_tuner_vchannel(49)
 #device_adapter.set_tuner_target('rtp://192.168.5.13:7891')

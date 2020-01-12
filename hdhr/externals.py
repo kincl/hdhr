@@ -40,6 +40,14 @@ CFUNC_hdhomerun_device_destroy.argtypes = \
 CFUNC_hdhomerun_device_destroy.restype = \
     None
 
+CFUNC_hdhomerun_device_get_tuner_status = \
+    hdhr.hdhomerun_device_get_tuner_status
+CFUNC_hdhomerun_device_get_tuner_status.argtypes = \
+    [POINTER(TYPE_hdhomerun_device_t),
+     POINTER(c_char_p),
+     POINTER(TYPE_hdhomerun_tuner_status_t)
+    ]
+
 CFUNC_hdhomerun_device_get_tuner_vstatus = \
     hdhr.hdhomerun_device_get_tuner_vstatus
 CFUNC_hdhomerun_device_get_tuner_vstatus.argtypes = \

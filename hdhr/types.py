@@ -76,11 +76,31 @@ class TYPE_hdhomerun_tuner_status_t(Structure):
                 ('packets_per_second',      c_uint, 32)
                ]
 
+    @property
+    def nice_channel(self):
+        return ascii_str(self.channel)
+
+    @property
+    def nice_lock_str(self):
+        return ascii_str(self.lock_str)
+
+    @property
+    def signal_present(self):
+        return not not self.signal_present
+
+    @property
+    def lock_supported(self):
+        return not not self.lock_supported
+
+    @property
+    def lock_unsupported(self):
+        return not not self.lock_unsupported
+
     def __str__(self):
         return ("STATUS  CHANNEL= [%s]  LOCK_STR= [%s]  SIG_PRESENT= [%s]  "
                 "LOCK_SUPP= [%s]  LOCK_UNSUPP= [%s]  SIG_STRENGTH= (%d)  "
                 "SN_QUAL= (%d)  SYMERR_QUAL= (%d)  RAW_BPS= (%d)  PPS= (%d)" %
-                (ascii_str(self.channel), ascii_str(self.lock_str), not not self.signal_present, 
+                (self.nice_channel, self.nice_lock_str, not not self.signal_present, 
                  not not self.lock_supported, not not self.lock_unsupported, 
                  self.signal_strength, self.signal_to_noise_quality, 
                  self.symbol_error_quality, self.raw_bits_per_second, 

@@ -163,6 +163,33 @@ class HdhrDeviceQuery(object):
 
         return ascii_str(result)
 
+    def get_tuner_status(self):
+        """Get the current state of the tuner."""
+
+        _LOGGER.debug("Doing device_get_tuner_status call for device [%s]." %
+                     (self.hd))
+
+        raw_data = c_char_p()
+        status = TYPE_hdhomerun_tuner_status_t()
+
+        try:
+            result = CFUNC_hdhomerun_device_get_tuner_status(
+                            self.hd,
+                            raw_data,
+                            status
+                        )
+        except:
+            _LOGGER.exception("Tuner status failed.")
+            raise
+
+        if result != 1:
+            message = ("Could not get tuner status (%d)." % (result))
+            
+            _LOGGER.error(message)
+            raise Exception(message)
+
+        return (status, raw_data.value)
+
     def get_tuner_vstatus(self):
         """Get the current state of the tuner using virtual channels (familiar 
         channel number).
