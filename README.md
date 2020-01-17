@@ -52,3 +52,7 @@ Requirements
   "libhdhomerun.so" is either in the directory of this project, or in the 
   library search-path.
 
+Development Resources
+---------------------
+
+In addition to the libhdhomerun source, the [HDHomeRun development guide](https://www.silicondust.com/hdhomerun/hdhomerun_development.pdf) is also useful.
