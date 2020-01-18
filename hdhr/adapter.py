@@ -264,6 +264,31 @@ class HdhrDeviceQuery(object):
         
         return [StreamInfo(**m.groupdict()) for m in regex.finditer(unparsed)]
 
+    def get_tuner_program(self):
+        """Gets the current MPEG program filter."""
+
+        _LOGGER.debug("Doing device_get_tuner_program call for device [%s]." % 
+                     (self.hd))
+
+        raw_str = c_char_p()
+
+        try:
+            result = CFUNC_hdhomerun_device_get_tuner_program(
+                            self.hd, 
+                            raw_str
+                        )
+        except:
+            _LOGGER.exception("Tuner program failed.")
+            raise
+
+        if result != 1:
+            message = ("Could not get tuner program (%d)." % (result))
+            
+            _LOGGER.error(message)
+            raise error_for_result(result, message)
+
+        return ascii_str(raw_str.value)
+
     def set_tuner_vchannel(self, vchannel):
         """Set the current vchannel (familiar channel numbering)."""
         

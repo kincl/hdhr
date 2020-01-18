@@ -63,6 +63,13 @@ CFUNC_hdhomerun_device_get_tuner_streaminfo.argtypes = \
      POINTER(c_char_p)
     ]
 
+CFUNC_hdhomerun_device_get_tuner_program = \
+    hdhr.hdhomerun_device_get_tuner_program
+CFUNC_hdhomerun_device_get_tuner_program.argtypes = \
+    [POINTER(TYPE_hdhomerun_device_t),
+     POINTER(c_char_p)
+    ]
+
 CFUNC_hdhomerun_device_get_version = \
     hdhr.hdhomerun_device_get_version
 CFUNC_hdhomerun_device_get_version.argtypes = \
