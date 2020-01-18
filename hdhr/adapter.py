@@ -1,5 +1,6 @@
 
 import logging
+import re
 
 from ctypes import *
 from sys import exit
@@ -8,6 +9,7 @@ from time import time
 from collections import deque
 from struct import unpack
 
+from hdhr.adapter_types import *
 from hdhr.externals import *
 from hdhr.types import *
 from hdhr.constants import *
@@ -230,6 +232,37 @@ class HdhrDeviceQuery(object):
             raise error_for_result(result, message)
 
         return (vstatus, raw_data.value)
+
+    def get_tuner_streaminfo(self):
+        """Gets the programs (sub-channels) for the current stream."""
+
+        _LOGGER.debug("Doing device_get_tuner_streaminfo call for device [%s]." % 
+                     (self.hd))
+
+        raw_str = c_char_p()
+
+        try:
+            result = CFUNC_hdhomerun_device_get_tuner_streaminfo(
+                            self.hd, 
+                            raw_str
+                        )
+        except:
+            _LOGGER.exception("Tuner streaminfo failed.")
+            raise
+
+        if result != 1:
+            message = ("Could not get tuner streaminfo (%d)." % (result))
+            
+            _LOGGER.error(message)
+            raise error_for_result(result, message)
+
+        unparsed = ascii_str(raw_str.value)
+
+        regex = re.compile(
+            r'^(?P<program>\d+): (?P<vchannel>\d+(?:\.\d+)?)(?: (?P<name>\S+))??(?: \((?P<flags>.+)\))?$',
+            re.MULTILINE)
+        
+        return [StreamInfo(**m.groupdict()) for m in regex.finditer(unparsed)]
 
     def set_tuner_vchannel(self, vchannel):
         """Set the current vchannel (familiar channel numbering)."""

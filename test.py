@@ -25,6 +25,11 @@ def get_tuner_vstatus(device_adapter):
     (vstatus, raw_data) = device_adapter.get_tuner_vstatus()
     print(vstatus)
 
+def get_tuner_streaminfo(device_adapter):
+
+    streaminfo = device_adapter.get_tuner_streaminfo()
+    print(streaminfo)
+
 def set_tuner_vchannel(device_adapter, vchannel):
     
     device_adapter.set_tuner_vchannel(vchannel)
@@ -98,6 +103,8 @@ for tuner in range(0, devices[0].tuner_count):
 
     vstatus = get_tuner_vstatus(device_adapter)
     print("Vstatus: %s" % (vstatus))
+
+    streaminfo = get_tuner_streaminfo(device_adapter)
 
 #device_adapter.set_tuner_vchannel(49)
 #device_adapter.set_tuner_target('rtp://192.168.5.13:7891')
