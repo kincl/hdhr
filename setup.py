@@ -18,7 +18,7 @@ long_description = "HDHomeRun interface library. Supports device discovery, " \
                    "changes, etc.."""
 
 setup(name='hdhr',
-      version='0.0.6',
+      version='0.0.7',
       description="HDHomeRun interface library for Python 3.",
       long_description=long_description,
       classifiers=['Development Status :: 4 - Beta',
