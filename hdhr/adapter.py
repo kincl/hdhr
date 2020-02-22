@@ -159,7 +159,7 @@ class HdhrDeviceQuery(object):
             _LOGGER.exception("Could not get hardware model string.")
             raise
 
-        return ascii_str(result)
+        return ascii_str(result) if result is not None else None
 
     def get_model_str(self):
         """Get the model of the device."""
@@ -175,7 +175,7 @@ class HdhrDeviceQuery(object):
             _LOGGER.exception("Could not get model string.")
             raise
 
-        return ascii_str(result)
+        return ascii_str(result) if result is not None else None
 
     def get_tuner_status(self):
         """Get the current state of the tuner."""
