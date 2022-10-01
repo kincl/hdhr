@@ -475,46 +475,38 @@ class HdhrDeviceQuery(object):
         _LOGGER.debug("Doing actual scan.")
 
         try:
-            found = self.__do_scan(scan, num_channels)
+            i = 0
+            num_channels = float(num_channels)
+            while 1:
+                result = TYPE_hdhomerun_channelscan_result_t()
+
+                if CFUNC_channelscan_advance(scan.contents, result) != 1:
+                    break
+
+                if CFUNC_channelscan_detect(scan.contents, result) == 1 and \
+                    result.program_count > 0:
+                
+                    yield (True, i, num_channels, result)
+                
+                else:
+                    yield (False, i, num_channels)
+                
+                i += 1
+
+                _LOGGER.debug("Channel scan progress is (%d)/(%d)." % 
+                            (i + 1, num_channels))
+
+            # Yield at 100%.
+            yield (False, i, num_channels)
         except:
             _LOGGER.exception("Could not do actual channel scan.")
             raise
-        else:
-            _LOGGER.info("Found programs on (%d) channels." % (len(found)))
-            return found
         finally:
             try:
                 CFUNC_channelscan_destroy(scan)
             except:
                 _LOGGER.exception("Could not destroy channel-scan entity.")
                 raise
-
-    def __do_scan(self, scan, num_channels):
-        """Do the actual scan (looping over channel numbers)."""
-    
-        i = 0
-        num_channels = float(num_channels)
-        while 1:
-            result = TYPE_hdhomerun_channelscan_result_t()
-
-            if CFUNC_channelscan_advance(scan.contents, result) != 1:
-                break
-
-            if CFUNC_channelscan_detect(scan.contents, result) == 1 and \
-                 result.program_count > 0:
-            
-                yield (True, i, num_channels, result)
-            
-            else:
-                yield (False, i, num_channels)
-            
-            i += 1
-
-            _LOGGER.debug("Channel scan progress is (%d)/(%d)." % 
-                          (i + 1, num_channels))
-
-        # Yield at 100%.
-        yield (False, i, num_channels)
 
     def set_tuner_target(self, target_uri=None):
         """Start sending video to the given URI."""
