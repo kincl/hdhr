@@ -480,7 +480,7 @@ class HdhrDeviceQuery(object):
             _LOGGER.exception("Could not do actual channel scan.")
             raise
         else:
-            _LOGGER.info("Found programs on (%d) channels." % (len(list(found))))
+            _LOGGER.info("Found programs on (%d) channels." % (len(found)))
             return found
         finally:
             try:
@@ -494,7 +494,6 @@ class HdhrDeviceQuery(object):
     
         i = 0
         num_channels = float(num_channels)
-        results = []
         while 1:
             result = TYPE_hdhomerun_channelscan_result_t()
 
@@ -504,14 +503,18 @@ class HdhrDeviceQuery(object):
             if CFUNC_channelscan_detect(scan.contents, result) == 1 and \
                  result.program_count > 0:
             
-                results.append(result)
-
+                yield (True, i, num_channels, result)
+            
+            else:
+                yield (False, i, num_channels)
+            
             i += 1
 
             _LOGGER.debug("Channel scan progress is (%d)/(%d)." % 
                           (i + 1, num_channels))
 
-        return results
+        # Yield at 100%.
+        yield (False, i, num_channels)
 
     def set_tuner_target(self, target_uri=None):
         """Start sending video to the given URI."""
