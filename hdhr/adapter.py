@@ -533,7 +533,7 @@ class HdhrDeviceQuery(object):
             raise
 
         if result != 1:
-            message = ("Could not set tuner target to [%s]." % (target))
+            message = ("Could not set tuner target to [%s]." % (target_uri))
             
             _LOGGER.error(message)
             raise error_for_result(result, message)
@@ -701,7 +701,7 @@ class HdhrVideo(object):
 
     def stream_to_file(self, file_path):
     
-        with file(file_path, 'ab') as f:
+        with open(file_path, 'ab') as f:
 
             def frame_received(frame):
                 if not hasattr(frame_received, 'frame_count'):

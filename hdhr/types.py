@@ -145,7 +145,7 @@ class TYPE_hdhomerun_channelscan_result_t(Structure):
 
     def dump_programs(self):
         i = 0
-        for i in xrange(self.program_count):
+        for i in range(self.program_count):
             print("%d: %s" % (i, self.programs[i]))
 
             i += 1
