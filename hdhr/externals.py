@@ -210,3 +210,16 @@ CFUNC_hdhomerun_device_stream_recv.argtypes = \
 CFUNC_hdhomerun_device_stream_recv.restype = \
     POINTER(c_uint8)
 
+CFUNC_hdhomerun_device_set_tuner_channel = \
+    hdhr.hdhomerun_device_set_tuner_channel
+CFUNC_hdhomerun_device_set_tuner_channel.argtypes = \
+    [POINTER(TYPE_hdhomerun_device_t),
+     c_char_p
+    ]
+
+CFUNC_hdhomerun_device_set_tuner_program = \
+    hdhr.hdhomerun_device_set_tuner_program
+CFUNC_hdhomerun_device_set_tuner_program.argtypes = \
+    [POINTER(TYPE_hdhomerun_device_t),
+     c_char_p
+    ]

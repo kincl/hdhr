@@ -538,6 +538,49 @@ class HdhrDeviceQuery(object):
             _LOGGER.error(message)
             raise error_for_result(result, message)
 
+    def set_tuner_channel(self, channel):
+        """Set the current channel"""
+        
+        channel = str(channel)
+        
+        _LOGGER.debug("Doing device_set_tuner_channel call for device [%s] with"
+                     " channel [%s]." % (self.hd, channel))
+        
+        try:
+            result = CFUNC_hdhomerun_device_set_tuner_channel(self.hd, 
+                                                              ascii_bytes(channel))
+        except:
+            _LOGGER.exception("Could not set channel.")
+            raise
+
+        if result != 1:
+            message = "Failed to set channel."
+            
+            _LOGGER.error(message)
+            raise error_for_result(result, message)
+
+    def set_tuner_program(self, program):
+        """Set the current program"""
+        
+        program = str(program)
+        
+        _LOGGER.debug("Doing device_set_tuner_program call for device [%s] with"
+                     " program [%s]." % (self.hd, program))
+        
+        try:
+            result = CFUNC_hdhomerun_device_set_tuner_program(self.hd, 
+                                                              ascii_bytes(program))
+        except:
+            _LOGGER.exception("Could not set program.")
+            raise
+
+        if result != 1:
+            message = "Failed to set program."
+            
+            _LOGGER.error(message)
+            raise error_for_result(result, message)
+
+
 class HdhrVideoPrimitives(object):
     """Wrappers for low-level functions."""
 
