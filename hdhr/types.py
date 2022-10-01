@@ -66,9 +66,9 @@ class TYPE_hdhomerun_channel_list_t(Structure):
 class TYPE_hdhomerun_tuner_status_t(Structure):
     _fields_ = [('channel',                 c_char * 32),
                 ('lock_str',                c_char * 32),
-                ('signal_present',          c_int, 32),
-                ('lock_supported',          c_int, 32),
-                ('lock_unsupported',        c_int, 32),
+                ('signal_present',          c_int, 1),
+                ('lock_supported',          c_int, 1),
+                ('lock_unsupported',        c_int, 1),
                 ('signal_strength',         c_uint, 32),
                 ('signal_to_noise_quality', c_uint, 32),
                 ('symbol_error_quality',    c_uint, 32),
