@@ -476,7 +476,7 @@ class HdhrDeviceQuery(object):
 
         try:
             i = 0
-            num_channels = float(num_channels)
+            num_channels = int(num_channels)
             while 1:
                 result = TYPE_hdhomerun_channelscan_result_t()
 
