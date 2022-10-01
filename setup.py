@@ -5,13 +5,13 @@ import os.path
 dev_path = os.path.dirname(__file__)
 sys.path.insert(0, dev_path)
 
-try:
-    import hdhr.libhdhr
-except OSError as e:
-    print("Could not load HDHomeRun library: %s" % (e))
-    sys.exit(1)
-else:
-    print("HDHomeRun libraries verified.")
+# try:
+#     import hdhr.libhdhr
+# except OSError as e:
+#     print("Could not load HDHomeRun library: %s" % (e))
+#     sys.exit(1)
+# else:
+#     print("HDHomeRun libraries verified.")
 
 long_description = "HDHomeRun interface library. Supports device discovery, " \
                    "channel-scanning, streaming, status inquiries, channel " \
